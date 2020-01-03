@@ -23,6 +23,16 @@ function asset(string $path): string
 
 
 /**
+ * @param string $imageUrl
+ * @return string
+ */
+function routeImage(string $imageUrl): string
+{
+    return "https://via.placeholder.com/1200x628/0000FF/FFFFFF?text={$imageUrl}";
+}
+
+
+/**
  * @param string|null $type
  * @param string|null $message
  * @return null|string
