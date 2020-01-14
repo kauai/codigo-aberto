@@ -29,7 +29,7 @@
 
             <label>
                 <span class="field">Senha:</span>
-                <input autocomplete="" type="password" name="passwd"
+                <input autocomplete="" type="password" name="password"
                        placeholder="Informe sua senha:"/>
             </label>
 

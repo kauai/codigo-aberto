@@ -14,7 +14,7 @@ define("SITE", [
     "desc" => "Projeto login teste",
     "domain" => "teste.com",
     "locale" => "pt_BR",
-    "root" => "https://localhost/CODIGO-ABERTO/Temporada-01/"
+    "root" => "https://www.localhost/CODIGO-ABERTO/Temporada-01/"
 ]);
 
 /*
@@ -31,7 +31,7 @@ define("DATA_LAYER_CONFIG", [
     "driver" => "mysql",
     "host" => "localhost",
     "port" => "3306",
-    "dbname" => "fsphpadmin02",
+    "dbname" => "fullstackphp",
     "username" => "root",
     "passwd" => "",
     "options" => [
