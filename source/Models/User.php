@@ -59,6 +59,7 @@ class User extends DataLayer
             $this->fail = new Exception("O email informado já está em uso!!");
             return false;
         }
+        return true;
     }
 
     /**
