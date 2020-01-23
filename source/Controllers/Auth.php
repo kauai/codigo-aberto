@@ -28,29 +28,20 @@ class Auth extends Controller
             return;
         }
 
-        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            echo $this->ajaxResponse('message', [
-                "type" => "warning",
-                "message" => "O email que foi usado nao é valido!!"
-            ]);
-            return;
-        }
-
-        $checkUserEmail = (new User())->find('email = :email',"email={$data['email']}")->count();
-        if($checkUserEmail){
-            echo $this->ajaxResponse('message', [
-                "type" => "warning",
-                "message" => "Esse usuario já existe na nossa aplicação"
-            ]);
-            return;
-        }
-
         $user = new User();
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
         $user->email = $data['email'];
         $user->password = password_hash($data['password'], PASSWORD_DEFAULT);
-        $user->save();
+
+        if ($user->save()) {
+            echo $this->ajaxResponse('message', [
+                "type" => "error",
+                "message" => $user->fail()->getMessage()
+            ]);
+            return;
+        };
+
         $_SESSION['user'] = $user->id;
         echo $this->ajaxResponse('redirect', [
             "url" => $this->router->route("app.home")
