@@ -8,7 +8,6 @@
 
 namespace Source\Controllers;
 
-
 use Source\Models\User;
 
 class App extends Controller

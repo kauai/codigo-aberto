@@ -8,9 +8,18 @@
 
 namespace Source\Controllers;
 
+use Source\Models\User;
 
+/**
+ * Class Web
+ * @package Source\Controllers
+ */
 class Web extends Controller
 {
+    /**
+     * Web constructor.
+     * @param $router
+     */
     public function __construct($router)
     {
         parent::__construct($router);
@@ -20,6 +29,9 @@ class Web extends Controller
         }
     }
 
+    /**
+     *
+     */
     public function login(): void
     {
         echo $this->view->render('theme/login', [
@@ -32,6 +44,9 @@ class Web extends Controller
         ]);
     }
 
+    /**
+     * @param array $data
+     */
     public function register(array $data): void
     {
         echo $this->view->render('theme/register', [
@@ -49,6 +64,9 @@ class Web extends Controller
         ]);
     }
 
+    /**
+     *
+     */
     public function forget(): void
     {
         echo $this->view->render('theme/forget', [
@@ -67,8 +85,30 @@ class Web extends Controller
 
     }
 
+    /**
+     * @param $data
+     */
     public function reset($data): void
     {
+        $email = filter_var($data['email'],FILTER_VALIDATE_EMAIL);
+        $forget =  filter_var($data['forget'],FILTER_DEFAULT);
+
+        if (empty($_SESSION['forget'])) {
+            flash("info", "Informe seu email para recuperar a senha");
+            $this->router->redirect("web.forget");
+        }
+
+        if (empty($email) || empty($forget)) {
+            flash("error", "Nao foi possivel recuperar sua senha o Link foi corrompido");
+            $this->router->redirect("web.forget");
+        }
+
+        $user = (new User())->find("email = :email AND forget = :forget","email={$email}&forget={$forget}")->fetch();
+        if(!$user){
+            flash("error", "Usuario nao existente!!");
+            $this->router->redirect("web.forget");
+        }
+
         echo $this->view->render('theme/reset', [
             'head' => $this->seo->optimize(
                 "Crie sua nova senha |" . site('name'),
@@ -79,14 +119,17 @@ class Web extends Controller
         ]);
     }
 
+    /**
+     * @param $data
+     */
     public function error($data): void
     {
-        $error = filter_var($data['errcode'],FILTER_VALIDATE_INT);
+        $error = filter_var($data['errcode'], FILTER_VALIDATE_INT);
         echo $this->view->render('theme/error', [
             'head' => $this->seo->optimize(
                 "OOps {$error} |" . site('name'),
                 site(SITE['desc']),
-                $this->router->route("web.error",['errcode' => $error]),
+                $this->router->route("web.error", ['errcode' => $error]),
                 routeImage('Register')
             )->render(),
             "error" => $error
