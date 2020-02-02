@@ -14,7 +14,8 @@ define("SITE", [
     "desc" => "Projeto login teste",
     "domain" => "teste.com",
     "locale" => "pt_BR",
-    "root" => "https://www.localhost/CODIGO-ABERTO/Temporada-01/"
+    "root" => "https://www.localhost/CODIGO-ABERTO/Temporada-01/",
+    "root02" => "https://localhost/CODIGO-ABERTO/Temporada-01",
 ]);
 
 /*
@@ -59,9 +60,9 @@ define("SOCIAL", [
 define('CONF_MAIL_HOST', "smtp.sendgrid.net");
 define('CONF_MAIL_PORT', "587");
 define('CONF_MAIL_USER', "apikey");
-define('CONF_MAIL_SENDER', ["name" => "Master dev", "address" => "mariaviana143@gmail.com"]);
-define('CONF_MAIL_PASS', "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");
-define('CONF_MAIL_SUPPORT', "html5ephp@gmail.com");
+define('CONF_MAIL_SENDER', ["name" => "", "address" => ""]);
+define('CONF_MAIL_PASS', "");
+define('CONF_MAIL_SUPPORT', "");
 
 define('CONF_MAIL_OPTION_LANG', "br");
 define('CONF_MAIL_OPTION_HTML', true);
@@ -72,6 +73,16 @@ define('CONF_MAIL_OPTION_CHARSET', "utf-8");
 /*
  * SOCIAL LOGIN
  */
-define("FACEBOOK_LOGIN","AA");
-define("GOOGLE_LOGIN","");
+define("FACEBOOK_LOGIN",[
+    'clientId'          => '',
+    'clientSecret'      => '',
+    'redirectUri'       => SITE['root02']."/facebook",
+    'graphApiVersion'   => 'v4.0'
+]);
+
+define("GOOGLE_LOGIN",[
+    'clientId'          => '.apps.googleusercontent.com',
+    'clientSecret'      => '',
+    'redirectUri'       => SITE['root02']."/google",
+]);
 

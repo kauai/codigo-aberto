@@ -49,6 +49,30 @@ class Web extends Controller
      */
     public function register(array $data): void
     {
+        $form_user = (object)[
+            'first_name' => '',
+            'last_name' => '',
+            'email' => ''
+        ];
+
+        $social_user = null;
+
+        if(!empty($_SESSION['facebook_auth'])) {
+            $social_user = unserialize($_SESSION['facebook_auth']);
+        }
+
+        if(!empty($_SESSION['google_auth'])) {
+            $social_user = unserialize($_SESSION['google_auth']);
+        }
+
+        if ($social_user) {
+            $form_user = (object) [
+                'first_name' => $social_user->getFirstName(),
+                'last_name' => $social_user->getLastName(),
+                'email' => $social_user->getEmail()
+            ];
+        }
+
         echo $this->view->render('theme/register', [
             'head' => $this->seo->optimize(
                 "Cria sua conta no site" . site('name'),
@@ -56,11 +80,7 @@ class Web extends Controller
                 $this->router->route("web.register"),
                 routeImage('Register')
             )->render(),
-            "user" => (object)[
-                'first_name' => 'Thiago',
-                'last_name' => 'Kauai',
-                'email' => 'thiago@gmail.com'
-            ]
+            "user" => $form_user
         ]);
     }
 
@@ -90,8 +110,8 @@ class Web extends Controller
      */
     public function reset($data): void
     {
-        $email = filter_var($data['email'],FILTER_VALIDATE_EMAIL);
-        $forget =  filter_var($data['forget'],FILTER_DEFAULT);
+        $email = filter_var($data['email'], FILTER_VALIDATE_EMAIL);
+        $forget = filter_var($data['forget'], FILTER_DEFAULT);
 
         if (empty($_SESSION['forget'])) {
             flash("info", "Informe seu email para recuperar a senha");
@@ -103,8 +123,8 @@ class Web extends Controller
             $this->router->redirect("web.forget");
         }
 
-        $user = (new User())->find("email = :email AND forget = :forget","email={$email}&forget={$forget}")->fetch();
-        if(!$user){
+        $user = (new User())->find("email = :email AND forget = :forget", "email={$email}&forget={$forget}")->fetch();
+        if (!$user) {
             flash("error", "Usuario nao existente!!");
             $this->router->redirect("web.forget");
         }
